@@ -2,8 +2,8 @@
 
 import requests
 from collections import Counter
-import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup
+
 
 class Sequence:
     def __init__(self, label=None, id=None, seq=None):
@@ -11,6 +11,8 @@ class Sequence:
         self.sequence = None
         self.composition = None
         self.seq_length = None
+        self.data = None
+        self.record = None
 
         if not (label is None) and not (id is None):
             self.set_id(label, id)
@@ -37,10 +39,9 @@ class Sequence:
         self.set_sequence("".join(fasta[1:]))
         self.id["uniprot_header"] = fasta[0]
 
-        # self.data = ET.fromstring(self.record.text)
-
         self.data = BeautifulSoup(self.record.text, 'xml')
         self.id["scientific_name"] = self.data.find('organism').find('name', {'type':"scientific"}).text
+        self.id["protein_name"] = self.data.find('name').text
 
     def analyse_aa_composition(self):
         if self.sequence is None:
@@ -50,7 +51,3 @@ class Sequence:
 
         # Convert raw counts into a percentage
         self.composition = {res: raw_counts[res] / self.seq_length * 100.0 for res in raw_counts}
-
-
-
-
