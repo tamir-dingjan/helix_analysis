@@ -20,8 +20,8 @@ class Sequence:
         if not (seq is None):
             self.set_sequence(seq)
 
-    def set_id(self, label, id):
-        self.id[label] = id
+    def set_id(self, label, new_id):
+        self.id[label] = new_id
 
     def set_sequence(self, seq):
         self.sequence = seq
@@ -32,6 +32,8 @@ class Sequence:
             raise Exception("ERROR: No Uniprot ID set! Cannot fetch sequence.")
 
         uniprot_site_prefix = "https://www.uniprot.org/uniprot/"
+
+        # TODO - Handle cases with incorrect Uniprot IDs
 
         fasta = requests.get(uniprot_site_prefix + self.id["uniprot"] + ".fasta").text.split("\n")
         self.record = requests.get(uniprot_site_prefix + self.id["uniprot"] + ".xml")
