@@ -9,6 +9,7 @@ class Multiseq:
         self.dataset = []
         self.table = None
         self.ids = None
+        self.locations = set()
         self.amino_acids = ['A',
                             'R',
                             'N',
@@ -64,3 +65,11 @@ class Multiseq:
 
         for aa in self.amino_acids:
             self.table[aa] = [s.composition.get(aa, None) for s in self.dataset]
+
+        # Store subcellular locations
+        for s in self.dataset:
+            self.locations.update(set(s.id["location"].keys()))
+
+        for location in sorted(self.locations):
+            self.table[location] = [s.id["location"].get(location, None) for s in self.dataset]
+

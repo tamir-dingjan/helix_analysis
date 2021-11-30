@@ -8,7 +8,7 @@ import logging
 
 class Sequence:
     def __init__(self, label=None, id=None, seq=None):
-        self.id = {}
+        self.id = {"location": {}}
         self.composition = {}
         self.sequence = None
         self.seq_length = None
@@ -46,6 +46,9 @@ class Sequence:
             self.data = BeautifulSoup(self.record.text, 'xml')
             self.id["scientific_name"] = self.data.find('organism').find('name', {'type':"scientific"}).text
             self.id["protein_name"] = self.data.find('name').text
+
+            for i in self.data.find_all('subcellularLocation'):
+                self.id["location"][i.text.strip()] = True
 
     def analyse_aa_composition(self):
         if self.id.get("found", None) == False:
