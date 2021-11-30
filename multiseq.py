@@ -51,11 +51,13 @@ class Multiseq:
         seq_lengths = [x.seq_length for x in self.dataset]
         sequences = [x.sequence for x in self.dataset]
 
-        self.table = pd.DataFrame(list(zip(scientific_names,
+        self.table = pd.DataFrame(list(zip(self.ids,
+                                           scientific_names,
                                            protein_names,
                                            seq_lengths,
                                            sequences)),
-                                  columns=['scientific_name',
+                                  columns=['uniprot_id',
+                                           'scientific_name',
                                            'protein_name',
                                            'sequence_length',
                                            'sequence'])
